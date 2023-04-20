@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Expense Tracker</title>
+	<style>
+		li {
+			margin-bottom: 10px;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		li button {
+			margin-left: 10px;
+			padding: 5px 10px;
+			border: none;
+			border-radius: 5px;
+			background-color: #ccc;
+			color: #fff;
+			cursor: pointer;
+		}
+		li button:hover {
+			background-color: #555;
+		}
+	</style>
+	<script>
+		var expenses = [];
+		function addExpense() {
+			var amount = document.getElementById("amount").value;
+			var desc = document.getElementById("description").value;
+			var category = document.getElementById("category").value;
+			var expense = {"amount": amount, "description": desc, "category": category};
+			expenses.push(expense);
+			showExpenses();
+			clearForm();
+		}
+		function showExpenses() {
+			var expenseList = document.getElementById("expenseList");
+			expenseList.innerHTML = "";
+			for (var i = 0; i < expenses.length; i++) {
+				var expense = expenses[i];
+				var li = document.createElement("li");
+				var expenseText = document.createTextNode(expense.amount + " - " + expense.description + " (" + expense.category + ")");
+				li.appendChild(expenseText);
+				var editBtn = document.createElement("button");
+				editBtn.innerHTML = "Edit";
+				editBtn.setAttribute("onclick", "editExpense(" + i + ")");
+				li.appendChild(editBtn);
+				var delBtn = document.createElement("button");
+				delBtn.innerHTML = "Delete";
+				delBtn.setAttribute("onclick", "deleteExpense(" + i + ")");
+				li.appendChild(delBtn);
+				expenseList.appendChild(li);
+			}
+		}
+		function clearForm() {
+			document.getElementById("amount").value = "";
+			document.getElementById("description").value = "";
+			document.getElementById("category").value = "";
+		}
+		function editExpense(index) {
+			var expense = expenses[index];
+			document.getElementById("amount").value = expense.amount;
+			document.getElementById("description").value = expense.description;
+			document.getElementById("category").value = expense.category;
+			expenses.splice(index, 1);
+			showExpenses();
+		}
+		function deleteExpense(index) {
+			expenses.splice(index, 1);
+			showExpenses();
+		}
+	</script>
+</head>
+<body>
+	<h1>Expense Tracker</h1>
+	<form>
+		<label for="amount">Amount:</label>
+		<input type="number" id="amount" name="amount"><br><br>
+		<label for="description">Description:</label>
+		<input type="text" id="description" name="description"><br><br>
+		<label for="category">Category:</label>
+		<input type="text" id="category" name="category"><br><br>
+		<input type="button" value="Add Expense" onclick="addExpense()">
+	</form>
+	<br>
+	<ul id="expenseList">
+	</ul>
+</body>
+</html>
