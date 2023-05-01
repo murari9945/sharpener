@@ -19,7 +19,7 @@
   
     <ul id="users"></ul>
   </section>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.js"></script>
 <script>
  
 const form = document.getElementById('my-form');
@@ -47,7 +47,7 @@ form.addEventListener('submit', function(event) {
 
   
   //localStorage.setItem('users', JSON.stringify(users));
-   axios.post("https://crudcrud.com/api/ba7edc2c9a05449da1a11c6aaa59bbf7/appointmentData",user)
+   axios.post("https://crudcrud.com/api/a560d0f4a65a475ca48445cb3b67ff29/appointmentData",user)
   .then((response)=>{
     renderUserList(response.data)
     console.log(response)
@@ -68,22 +68,20 @@ form.addEventListener('submit', function(event) {
 });
 
 
-function renderUserList() {
-  
-  const users = JSON.parse(localStorage.getItem('users')) || [];
-
-  
-  userList.innerHTML = '';
-
-  
-  users.forEach(function(user) {
-    const li = document.createElement('li');
-    li.appendChild(document.createTextNode(`${user.name} - ${user.email} - ${user.phone}`));
-    userList.appendChild(li);
-  });
+function renderUserList(users) {
+  // fetch user details from API
+  axios.get('https://crudcrud.com/api/a560d0f4a65a475ca48445cb3b67ff29/appointmentData',users)
+    .then(response => {
+      const users = response.data;
+      userList.innerHTML = '';
+      users.forEach(function(user) {
+        const li = document.createElement('li');
+        li.appendChild(document.createTextNode(`${user.name} - ${user.email} - ${user.phone}`));
+        userList.appendChild(li);
+      });
+    })
+    .catch(error => console.log(error));
 }
 
-
-renderUserList();
 
 </script>  
