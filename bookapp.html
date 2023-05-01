@@ -1,0 +1,89 @@
+<section class="container">
+    <form id="my-form">
+      <h1>Add User</h1>
+      <div class="msg"></div>
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name">
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="text" id="email">
+      </div>
+      <div>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone">
+      </div>
+      <input class="btn" type="submit" value="Submit">
+    </form>
+  
+    <ul id="users"></ul>
+  </section>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+<script>
+ 
+const form = document.getElementById('my-form');
+
+
+const userList = document.getElementById('users');
+
+form.addEventListener('submit', function(event) {
+  
+  event.preventDefault();
+
+  
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+
+  
+  const user = { name, email, phone };
+
+  
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+
+  
+  users.push(user);
+
+  
+  //localStorage.setItem('users', JSON.stringify(users));
+   axios.post("https://crudcrud.com/api/ba7edc2c9a05449da1a11c6aaa59bbf7/appointmentData",user)
+  .then((response)=>{
+    renderUserList(response.data)
+    console.log(response)
+  })
+  .catch((err)=>{
+    document.body.innerHTML=document.body.innerHTML+"<h4>something went wrong</h4>"
+    console.log(err)
+  })
+
+
+  
+  document.getElementById('name').value = '';
+  document.getElementById('email').value = '';
+  document.getElementById('phone').value ='';
+
+  
+  //renderUserList();
+});
+
+
+function renderUserList() {
+  
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+
+  
+  userList.innerHTML = '';
+
+  
+  users.forEach(function(user) {
+    const li = document.createElement('li');
+    li.appendChild(document.createTextNode(`${user.name} - ${user.email} - ${user.phone}`));
+    userList.appendChild(li);
+  });
+}
+
+
+renderUserList();
+
+</script>  
