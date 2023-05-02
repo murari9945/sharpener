@@ -1,5 +1,6 @@
+<head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-V2rJr9JrNKvGqb0xI8BRYT3q+MzTvdffzlQKnB/3OM29sXefBf+GgN/cpF25x+/G+YFZI1aDkofCdzJt2+07Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+</head>
 <section class="container">
     <form id="my-form">
       <h1>Add User</h1>
@@ -83,13 +84,24 @@ function renderUserList() {
         const li = document.createElement('li');
         li.appendChild(document.createTextNode(`${user.name} - ${user.email} - ${user.phone}`));
         userList.appendChild(li);
-        const deleteIcon = document.createElement('i');
-        deleteIcon.className = 'fas fa-trash-alt delete-icon';
-        deleteIcon.addEventListener('click', function() {
+       // const deleteIcon = document.createElement('i');
+       // deleteIcon.className = 'fas fa-trash-alt delete-icon';
+        //deleteIcon.addEventListener('click', function() {
+         // deleteUser(user._id, li);
+       // });
+       // li.appendChild(deleteIcon);
+       const deleteButton = document.createElement('button');
+        deleteButton.innerText = "Delete";
+        deleteButton.addEventListener('click', function() {
           deleteUser(user._id, li);
         });
-        li.appendChild(deleteIcon);
-
+        const editButton = document.createElement('button');
+        editButton.innerText = "Edit";
+        editButton.addEventListener('click', function() {
+          editUser(user._id, user.name, user.email, user.phone);
+        });
+        li.appendChild(editButton);
+        li.appendChild(deleteButton);
         userList.appendChild(li);
       });
     })
@@ -102,6 +114,26 @@ function deleteUser(id, li) {
     })
     .catch(error => console.log(error));
 }
+function editUser(id, name, email, phone) {
+  const newName = prompt('Enter new name', name);
+  const newEmail = prompt('Enter new email', email);
+  const newPhone = prompt('Enter new phone', phone);
+
+  const updatedUser = { name: newName, email: newEmail, phone: newPhone };
+
+  axios.put(`https://crudcrud.com/api/a560d0f4a65a475ca48445cb3b67ff29/appointmentData/${id}`, updatedUser)
+    .then(response => {
+      renderUserList();
+    })
+    .catch(error => console.log(error));
+}
+
+
+
+
+
+
+
 
 
 
