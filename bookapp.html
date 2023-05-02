@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-V2rJr9JrNKvGqb0xI8BRYT3q+MzTvdffzlQKnB/3OM29sXefBf+GgN/cpF25x+/G+YFZI1aDkofCdzJt2+07Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <section class="container">
     <form id="my-form">
       <h1>Add User</h1>
@@ -26,6 +28,9 @@ const form = document.getElementById('my-form');
 
 
 const userList = document.getElementById('users');
+document.addEventListener('DOMContentLoaded', function() {
+      renderUserList();
+    });
 
 form.addEventListener('submit', function(event) {
   
@@ -68,7 +73,7 @@ form.addEventListener('submit', function(event) {
 });
 
 
-function renderUserList(users) {
+function renderUserList() {
   // fetch user details from API
   axios.get('https://crudcrud.com/api/a560d0f4a65a475ca48445cb3b67ff29/appointmentData',users)
     .then(response => {
@@ -78,10 +83,26 @@ function renderUserList(users) {
         const li = document.createElement('li');
         li.appendChild(document.createTextNode(`${user.name} - ${user.email} - ${user.phone}`));
         userList.appendChild(li);
+        const deleteIcon = document.createElement('i');
+        deleteIcon.className = 'fas fa-trash-alt delete-icon';
+        deleteIcon.addEventListener('click', function() {
+          deleteUser(user._id, li);
+        });
+        li.appendChild(deleteIcon);
+
+        userList.appendChild(li);
       });
     })
     .catch(error => console.log(error));
 }
+function deleteUser(id, li) {
+  axios.delete(`https://crudcrud.com/api/a560d0f4a65a475ca48445cb3b67ff29/appointmentData/${id}`)
+    .then(response => {
+      li.remove();
+    })
+    .catch(error => console.log(error));
+}
+
 
 
 </script>  
